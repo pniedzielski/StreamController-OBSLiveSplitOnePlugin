@@ -1,0 +1,4 @@
+This code was based on Core447’s OBSPlugin, which can be found at
+https://github.com/StreamController/OBSPlugin.
+
+Core447’s OBSPlugin is licensed under the GPLv3.

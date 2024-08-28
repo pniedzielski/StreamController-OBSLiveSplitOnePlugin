@@ -1,0 +1,6 @@
+Store images in this directory were created by pniedzielski.  The
+LiveSplit logo is from the LiveSplit website and is licensed
+under the MIT license.  This image was retrieved from
+https://github.com/LiveSplit/LiveSplit.github.io/blob/2799534c343d2437ebdb38b099492af37834bf2f/images/icon.ico
+and converted to PNG.  A copy of the license can be found at
+https://github.com/LiveSplit/LiveSplit.github.io/blob/master/LICENSE.

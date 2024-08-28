@@ -1,2 +1,13 @@
-All images in this folder (and subfolders) are from fonts.google.com and licensed under the Apache License, Version 2.0.
-You can retrieve a copy of the license at https://www.apache.org/licenses/LICENSE-2.0.
+With the exceptions listed below, the images in this folder (and
+subfolders) are from fonts.google.com and licensed under the Apache
+License, Version 2.0.  You can retrieve a copy of the license at
+https://www.apache.org/licenses/LICENSE-2.0.
+
+The image livesplit.png is from the LiveSplit website and is licensed
+under the MIT license.  This image was retrieved from
+https://github.com/LiveSplit/LiveSplit.github.io/blob/2799534c343d2437ebdb38b099492af37834bf2f/images/icon.ico
+and converted to PNG.  A copy of the license can be found at
+https://github.com/LiveSplit/LiveSplit.github.io/blob/master/LICENSE.
+
+The image screenshot.png was created by pniedzielski, and includes
+other images from this folder.
