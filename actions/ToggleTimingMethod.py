@@ -19,5 +19,9 @@ class ToggleTimingMethod(OBSLiveSplitOneActionBase):
 
     def on_key_down(self):
         if not self.plugin_base.backend.get_connected():
-            return
+            # Try to reconnect once.
+            self._reconnect_obs()
+            if not self.plugin_base.backend.get_connected():
+                return
+
         self.plugin_base.backend.toggle_timing_method()
