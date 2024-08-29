@@ -1,6 +1,7 @@
 from streamcontroller_plugin_tools import BackendBase
 import obsws_python as obs
 from loguru import logger as log
+from obsws_python.error import OBSSDKRequestError
 
 class Backend(BackendBase):
     def __init__(self):
@@ -9,11 +10,7 @@ class Backend(BackendBase):
         self.obs_client = None
         self.connected = False
 
-        host = self.frontend.get_settings().get("ip", "localhost")
-        port = self.frontend.get_settings().get("port", 4455),
-        password = self.frontend.get_settings().get("password") or ""
-
-        self.connect_to(host, port, password)
+        self.connect()
 
     def validate_host(self, host: str):
         if host in ("localhost", "127.0.0.1"):
@@ -23,6 +20,13 @@ class Backend(BackendBase):
         # within flatpak, so I don't want to use that.  Instead make
         # use of ipaddress library?
         return True
+
+    def connect(self) -> bool:
+        host = self.frontend.get_settings().get("ip", "localhost")
+        port = self.frontend.get_settings().get("port", 4455),
+        password = self.frontend.get_settings().get("password") or ""
+
+        return self.connect_to(host, port, password)
 
     def connect_to(
             self,
@@ -46,7 +50,7 @@ class Backend(BackendBase):
             self.connected = True
             log.info("Successfully connected to OBS")
             return True
-        except (obs.error.OBSSDKError, ValueError) as e:
+        except Exception as e:
             log.error(f"Failed to connect to OBS: {e}")
             self.connected = False
             return False
@@ -60,10 +64,11 @@ class Backend(BackendBase):
 
         try:
             self.obs_client.trigger_hotkey_by_name(name)
-        except obs.error.OBSTimeoutError as e:
-            log.error(f"Connection to OBS timed out: {e}")
-        except obs.error.OBSSDKError as e:
-            log.error(e)
+        except obs.error.OBSSDKRequestError as e:
+            log.error(f"OBS returned an error: {e}")
+        except Exception as e:
+            log.error(f"Fatal error: {e}")
+            self.connected = False
 
     def split(self):
         self._trigger_hotkey_by_name("hotkey_split")
