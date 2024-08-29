@@ -8,6 +8,7 @@
     "actions.prev-comparison.name": "Previous Comparison",
     "actions.toggle-timing-method.name": "Toggle Timing Method",
     "actions.reset.name": "Reset",
+    "actions.pause.name": "Pause",
 
     "actions.base.status.no-connection": "Could not connect to OBS.",
     "actions.base.status.connected": "Successfully connected to OBS.",
