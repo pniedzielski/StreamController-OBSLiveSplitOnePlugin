@@ -28,6 +28,18 @@ class Backend(BackendBase):
 
         return self.connect_to(host, port, password)
 
+    def disconnect(self):
+        if not self.get_connected():
+            return
+
+        try:
+            self.obs_client.disconnect()
+            log.info("Successfully disconnected from OBS")
+        except Exception as e:
+            log.error(f"Failed to disconnect from OBS: {e}")
+        finally:
+            self.connected = False
+
     def connect_to(
             self,
             host: str,
