@@ -21,6 +21,7 @@ from .actions.PrevComparison import PrevComparison
 from .actions.ToggleTimingMethod import ToggleTimingMethod
 from .actions.Reset import Reset
 from .actions.Pause import Pause
+from .actions.UndoAllPauses import UndoAllPauses
 
 class OBSLiveSplitOnePlugin(PluginBase):
     def __init__(self):
@@ -175,6 +176,22 @@ class OBSLiveSplitOnePlugin(PluginBase):
             }
         )
         self.add_action_holder(pause_action_holder)
+
+        undo_all_pauses_action_holder = ActionHolder(
+            plugin_base=self,
+            action_base=UndoAllPauses,
+            action_id_suffix="UndoAllPauses",
+            action_name=self.lm.get("actions.undo-all-pauses.name"),
+            icon=Gtk.Picture.new_for_filename(
+                os.path.join(self.PATH, "assets", "undo-all-pauses.png")
+            ),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED,
+            }
+        )
+        self.add_action_holder(undo_all_pauses_action_holder)
 
         # Load custom CSS
         self.add_css_stylesheet(os.path.join(self.PATH, "style.css"))
