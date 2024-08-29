@@ -20,6 +20,7 @@ from .actions.NextComparison import NextComparison
 from .actions.PrevComparison import PrevComparison
 from .actions.ToggleTimingMethod import ToggleTimingMethod
 from .actions.Reset import Reset
+from .actions.Pause import Pause
 
 class OBSLiveSplitOnePlugin(PluginBase):
     def __init__(self):
@@ -158,6 +159,22 @@ class OBSLiveSplitOnePlugin(PluginBase):
             }
         )
         self.add_action_holder(reset_action_holder)
+
+        pause_action_holder = ActionHolder(
+            plugin_base=self,
+            action_base=Pause,
+            action_id_suffix="Pause",
+            action_name=self.lm.get("actions.pause.name"),
+            icon=Gtk.Picture.new_for_filename(
+                os.path.join(self.PATH, "assets", "pause.png")
+            ),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED,
+            }
+        )
+        self.add_action_holder(pause_action_holder)
 
         # Load custom CSS
         self.add_css_stylesheet(os.path.join(self.PATH, "style.css"))

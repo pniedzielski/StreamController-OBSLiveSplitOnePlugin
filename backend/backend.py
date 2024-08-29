@@ -86,4 +86,7 @@ class Backend(BackendBase):
     def reset(self):
         self._trigger_hotkey_by_name("hotkey_reset")
 
+    def pause(self):
+        self._trigger_hotkey_by_name("hotkey_pause")
+
 backend = Backend()
