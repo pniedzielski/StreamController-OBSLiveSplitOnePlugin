@@ -89,4 +89,7 @@ class Backend(BackendBase):
     def pause(self):
         self._trigger_hotkey_by_name("hotkey_pause")
 
+    def undo_all_pauses(self):
+        self._trigger_hotkey_by_name("hotkey_undo_all_pauses")
+
 backend = Backend()
