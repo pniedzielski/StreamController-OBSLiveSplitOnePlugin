@@ -2,6 +2,7 @@ from streamcontroller_plugin_tools import BackendBase
 import obsws_python as obs
 from loguru import logger as log
 from obsws_python.error import OBSSDKRequestError
+import uuid
 
 class Backend(BackendBase):
     def __init__(self):
@@ -108,5 +109,44 @@ class Backend(BackendBase):
 
     def undo_all_pauses(self):
         self._trigger_hotkey_by_name("hotkey_undo_all_pauses")
+
+    def get_all_livesplit_one_sources(self):
+        if not self.get_connected():
+            return
+
+        try:
+            resp = self.obs_client.get_input_list(
+                kind="livesplit-one"
+            )
+            return [
+                {
+                    "name": source["inputName"],
+                    "uuid": uuid.UUID(source["inputUuid"]),
+                }
+                for source in resp.inputs
+            ]
+        except obs.error.OBSSDKRequestError as e:
+            log.error(f"OBS returned an error: {e}")
+        except Exception as e:
+            log.error(f"Fatal error: {e}")
+            self.connected = False
+
+    def interact_with_livesplit_one_source(self, uuid: uuid.UUID):
+        if not self.get_connected():
+            return
+
+        try:
+            # The OBS websocket client does not provide a wrapper for
+            # opening the interaction dialog box by UUID, only by
+            # name, so call the request manually.
+            self.obs_client.send(
+                "OpenInputInteractDialog",
+                {"inputUuid": str(uuid)},
+            )
+        except obs.error.OBSSDKRequestError as e:
+            log.error(f"OBS returned an error: {e}")
+        except Exception as e:
+            log.error(f"Fatal error: {e}")
+            self.connected = False
 
 backend = Backend()
