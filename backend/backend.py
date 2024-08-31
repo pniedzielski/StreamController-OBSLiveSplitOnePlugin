@@ -149,4 +149,22 @@ class Backend(BackendBase):
             log.error(f"Fatal error: {e}")
             self.connected = False
 
+    def save_splits(self, uuid: uuid.UUID):
+        if not self.get_connected():
+            return
+
+        try:
+            # The OBS websocket client does not provide a wrapper for
+            # editing a property by UUID, only by name, so call the
+            # request manually.
+            self.obs_client.send(
+                "PressInputPropertiesButton",
+                {"inputUuid": str(uuid), "propertyName": "save_splits"},
+            )
+        except obs.error.OBSSDKRequestError as e:
+            log.error(f"OBS returned an error: {e}")
+        except Exception as e:
+            log.error(f"Fatal error: {e}")
+            self.connected = False
+
 backend = Backend()

@@ -11,6 +11,7 @@
     "actions.pause.name": "Pause",
     "actions.undo-all-pauses.name": "Undo All Pauses",
     "actions.interact.name": "Interact with Timer Source",
+    "actions.save-splits.name": "Save Splits",
 
     "actions.base.status.no-connection": "Could not connect to OBS.",
     "actions.base.status.connected": "Successfully connected to OBS.",
