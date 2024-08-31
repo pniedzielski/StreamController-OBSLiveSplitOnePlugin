@@ -25,16 +25,29 @@ class OBSLiveSplitOneActionBase(ActionBase):
             self.reconnect_obs()
 
     def get_config_rows(self) -> list:
+        self.websocket_settings = Adw.PreferencesGroup()
+        self.websocket_settings.set_title(
+            self.plugin_base.lm.get("actions.base.websocket-group.title")
+        )
+        self.websocket_settings.set_description(
+            self.plugin_base.lm.get(
+                "actions.base.websocket-group.description"
+            )
+        )
+
         self.ip_entry = Adw.EntryRow(
             title=self.plugin_base.lm.get("actions.base.ip.label")
         )
+        self.websocket_settings.add(self.ip_entry)
         self.port_spinner = Adw.SpinRow.new_with_range(0, 65535, 1)
         self.port_spinner.set_title(
             self.plugin_base.lm.get("actions.base.port.label")
         )
+        self.websocket_settings.add(self.port_spinner)
         self.password_entry = Adw.PasswordEntryRow(
             title=self.plugin_base.lm.get("actions.base.password.label")
         )
+        self.websocket_settings.add(self.password_entry)
 
         self.load_config_defaults()
 
@@ -43,7 +56,7 @@ class OBSLiveSplitOneActionBase(ActionBase):
         self.port_spinner.connect("notify::value", self.on_change_port)
         self.password_entry.connect("notify::text", self.on_change_password)
 
-        return [self.ip_entry, self.port_spinner, self.password_entry]
+        return [self.websocket_settings]
 
     def load_config_defaults(self):
         settings = self.plugin_base.get_settings()
