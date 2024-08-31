@@ -15,6 +15,8 @@
     "actions.base.status.no-connection": "Could not connect to OBS.",
     "actions.base.status.connected": "Successfully connected to OBS.",
 
+    "actions.base.websocket-group.title": "OBS WebSocket Server",
+    "actions.base.websocket-group.description": "Provide the connection information to your OBS WebSocket server.  This will be shared across all OBS LiveSplit One actions.",
     "actions.base.ip.label": "IP:",
     "actions.base.port.label": "Port:",
     "actions.base.password.label": "Password:",
