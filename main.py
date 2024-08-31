@@ -25,6 +25,7 @@ from .actions.UndoAllPauses import UndoAllPauses
 from .actions.Interact import Interact
 from .actions.SaveSplits import SaveSplits
 from .actions.SetSplitsPath import SetSplitsPath
+from .actions.SetLayoutPath import SetLayoutPath
 
 class OBSLiveSplitOnePlugin(PluginBase):
     def __init__(self):
@@ -243,6 +244,22 @@ class OBSLiveSplitOnePlugin(PluginBase):
             }
         )
         self.add_action_holder(set_splits_path_action_holder)
+
+        set_layout_path_action_holder = ActionHolder(
+            plugin_base=self,
+            action_base=SetLayoutPath,
+            action_id_suffix="SetLayoutPath",
+            action_name=self.lm.get("actions.set-layout-path.name"),
+            icon=Gtk.Picture.new_for_filename(
+                os.path.join(self.PATH, "assets", "set-layout-path.png")
+            ),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED,
+            }
+        )
+        self.add_action_holder(set_layout_path_action_holder)
 
         # Load custom CSS
         self.add_css_stylesheet(os.path.join(self.PATH, "style.css"))
