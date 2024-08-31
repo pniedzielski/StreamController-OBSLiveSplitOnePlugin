@@ -48,7 +48,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
         self.register(
             plugin_name = self.lm.get("plugin.name"),
             github_repo = "https://github.com/pniedzielski/StreamController-OBSLiveSplitOnePlugin",
-            plugin_version = "1.1.1",
+            plugin_version = "1.2.0",
             app_version = "1.5.0-beta"
         )
 

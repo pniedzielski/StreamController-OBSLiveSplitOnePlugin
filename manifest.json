@@ -1,6 +1,6 @@
 {
     "name": "OBS LiveSplit One",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "thumbnail": "store/thumbnail.png",
     "id": "net_pniedzielski_OBSLiveSplitOnePlugin",
     "github": "https://github.com/pniedzielski/StreamController-OBSLiveSplitOnePlugin",
