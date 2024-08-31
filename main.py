@@ -24,6 +24,7 @@ from .actions.Pause import Pause
 from .actions.UndoAllPauses import UndoAllPauses
 from .actions.Interact import Interact
 from .actions.SaveSplits import SaveSplits
+from .actions.SetSplitsPath import SetSplitsPath
 
 class OBSLiveSplitOnePlugin(PluginBase):
     def __init__(self):
@@ -226,6 +227,22 @@ class OBSLiveSplitOnePlugin(PluginBase):
             }
         )
         self.add_action_holder(save_splits_action_holder)
+
+        set_splits_path_action_holder = ActionHolder(
+            plugin_base=self,
+            action_base=SetSplitsPath,
+            action_id_suffix="SetSplitsPath",
+            action_name=self.lm.get("actions.set-splits-path.name"),
+            icon=Gtk.Picture.new_for_filename(
+                os.path.join(self.PATH, "assets", "set-splits-path.png")
+            ),
+            action_support={
+                Input.Key: ActionInputSupport.SUPPORTED,
+                Input.Dial: ActionInputSupport.UNTESTED,
+                Input.Touchscreen: ActionInputSupport.UNTESTED,
+            }
+        )
+        self.add_action_holder(set_splits_path_action_holder)
 
         # Load custom CSS
         self.add_css_stylesheet(os.path.join(self.PATH, "style.css"))
