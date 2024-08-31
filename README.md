@@ -12,9 +12,10 @@ which adds LiveSplit One as an OBS source.  Currently, it supports:
 * Cycling through comparisons
 * Toggling between in-game timing and RTA timing
 * Pausing the timer and undoing all timer pauses
+* Saving your splits to disk
 
-In the future we plan to support saving splits, updating the current
-split and layout files, and configuring auto-splitters.
+In the future we plan to support updating the current split and layout
+files, and configuring auto-splitters.
 
 ## Requirements
 This plugin uses the OBS websocket interface to interact with a
