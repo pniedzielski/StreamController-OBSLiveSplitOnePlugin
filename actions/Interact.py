@@ -34,6 +34,8 @@ class Interact(OBSLiveSplitOneActionBase):
                 "actions.interact.preferences-group.description"
             )
         )
+        self.interact_settings.set_margin_top(10)
+        self.interact_settings.set_margin_bottom(10)
 
         self.source_entry = Adw.ComboRow(
             title=self.plugin_base.lm.get("actions.interact.source.label")

@@ -34,6 +34,8 @@ class OBSLiveSplitOneActionBase(ActionBase):
                 "actions.base.websocket-group.description"
             )
         )
+        self.websocket_settings.set_margin_top(10)
+        self.websocket_settings.set_margin_bottom(10)
 
         self.ip_entry = Adw.EntryRow(
             title=self.plugin_base.lm.get("actions.base.ip.label")
