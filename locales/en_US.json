@@ -13,6 +13,7 @@
     "actions.interact.name": "Interact with Timer Source",
     "actions.save-splits.name": "Save Splits",
     "actions.set-splits-path.name": "Set Splits File",
+    "actions.set-layout-path.name": "Set Layout File",
 
     "actions.base.status.no-connection": "Could not connect to OBS.",
     "actions.base.status.connected": "Successfully connected to OBS.",
@@ -32,5 +33,12 @@
     "actions.set-splits-path.path.label": "Path:",
     "actions.set-splits-path.button.label": "Browse",
     "actions.set-splits-path.dialog.title": "Select Splits File",
-    "actions.set-splits-path.dialog.accept.label": "Select"
+    "actions.set-splits-path.dialog.accept.label": "Select",
+
+    "actions.set-layout-path.preferences-group.title": "Layout To Load",
+    "actions.set-layout-path.preferences-group.description": "Select LiveSplit layout file to load.",
+    "actions.set-layout-path.path.label": "Path:",
+    "actions.set-layout-path.button.label": "Browse",
+    "actions.set-layout-path.dialog.title": "Select Layout File",
+    "actions.set-layout-path.dialog.accept.label": "Select"
 }
