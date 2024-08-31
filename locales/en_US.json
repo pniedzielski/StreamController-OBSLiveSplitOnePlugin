@@ -21,7 +21,7 @@
     "actions.base.port.label": "Port:",
     "actions.base.password.label": "Password:",
 
-    "actions.interact.preferences-group.title": "Timer Source",
-    "actions.interact.preferences-group.description": "Select an OBS LiveSplit One source to operate on if more than one source is present.",
-    "actions.interact.source.label": "Name:"
+    "actions.timer-source-base.preferences-group.title": "Timer Source",
+    "actions.timer-source-base.preferences-group.description": "Select an OBS LiveSplit One source to operate on if more than one source is present.",
+    "actions.timer-source-base.source.label": "Name:"
 }
