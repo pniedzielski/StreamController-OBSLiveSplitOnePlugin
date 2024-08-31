@@ -40,6 +40,7 @@ class OBSLiveSplitOneActionBase(ActionBase):
         self.ip_entry = Adw.EntryRow(
             title=self.plugin_base.lm.get("actions.base.ip.label")
         )
+        self.ip_entry.set_show_apply_button(True)
         self.websocket_settings.add(self.ip_entry)
         self.port_spinner = Adw.SpinRow.new_with_range(0, 65535, 1)
         self.port_spinner.set_title(
@@ -49,6 +50,7 @@ class OBSLiveSplitOneActionBase(ActionBase):
         self.password_entry = Adw.PasswordEntryRow(
             title=self.plugin_base.lm.get("actions.base.password.label")
         )
+        self.password_entry.set_show_apply_button(True)
         self.websocket_settings.add(self.password_entry)
 
         self.load_config_defaults()
