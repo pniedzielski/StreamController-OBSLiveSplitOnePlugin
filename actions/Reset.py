@@ -1,27 +1,26 @@
-from .OBSLiveSplitOneActionBase import OBSLiveSplitOneActionBase
+from .OBSLiveSplitOneCore import OBSLiveSplitOneCore
+from src.backend.PluginManager.EventAssigner import EventAssigner
+from src.backend.DeckManagement.InputIdentifier import Input
 
-import os
 
-class Reset(OBSLiveSplitOneActionBase):
+class Reset(OBSLiveSplitOneCore):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def on_ready(self):
-        # Connect to obs if not connected
-        if self.plugin_base.backend is not None:
-            if not self.plugin_base.get_connected():
-                self.reconnect_obs()
+    def get_icon_name(self) -> str:
+        return "reset.png"
 
-        image = "reset.png"
-        self.set_media(
-            media_path=os.path.join(self.plugin_base.PATH, "assets", image)
+    def create_event_assigners(self):
+        self.add_event_assigner(
+            EventAssigner(
+                id="reset",
+                ui_label="Reset",
+                default_event=Input.Key.Events.DOWN,
+                callback=self._on_reset,
+            )
         )
 
-    def on_key_down(self):
-        if not self.plugin_base.backend.get_connected():
-            # Try to reconnect once.
-            self._reconnect_obs()
-            if not self.plugin_base.backend.get_connected():
-                return
-
+    def _on_reset(self, data):
+        if not self.ensure_connection():
+            return
         self.plugin_base.backend.reset()
