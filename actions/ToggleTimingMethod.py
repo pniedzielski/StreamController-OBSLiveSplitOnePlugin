@@ -1,27 +1,26 @@
-from .OBSLiveSplitOneActionBase import OBSLiveSplitOneActionBase
+from .OBSLiveSplitOneCore import OBSLiveSplitOneCore
+from src.backend.PluginManager.EventAssigner import EventAssigner
+from src.backend.DeckManagement.InputIdentifier import Input
 
-import os
 
-class ToggleTimingMethod(OBSLiveSplitOneActionBase):
+class ToggleTimingMethod(OBSLiveSplitOneCore):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def on_ready(self):
-        # Connect to obs if not connected
-        if self.plugin_base.backend is not None:
-            if not self.plugin_base.get_connected():
-                self.reconnect_obs()
+    def get_icon_name(self) -> str:
+        return "toggle-timing-method.png"
 
-        image = "toggle-timing-method.png"
-        self.set_media(
-            media_path=os.path.join(self.plugin_base.PATH, "assets", image)
+    def create_event_assigners(self):
+        self.add_event_assigner(
+            EventAssigner(
+                id="toggle_timing_method",
+                ui_label="Toggle Timing Method",
+                default_event=Input.Key.Events.DOWN,
+                callback=self._on_toggle_timing_method,
+            )
         )
 
-    def on_key_down(self):
-        if not self.plugin_base.backend.get_connected():
-            # Try to reconnect once.
-            self._reconnect_obs()
-            if not self.plugin_base.backend.get_connected():
-                return
-
+    def _on_toggle_timing_method(self, data):
+        if not self.ensure_connection():
+            return
         self.plugin_base.backend.toggle_timing_method()
