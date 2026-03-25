@@ -24,7 +24,7 @@ class Backend(BackendBase):
 
     def connect(self) -> bool:
         host = self.frontend.get_settings().get("ip", "localhost")
-        port = self.frontend.get_settings().get("port", 4455),
+        port = self.frontend.get_settings().get("port", 4455)
         password = self.frontend.get_settings().get("password") or ""
 
         return self.connect_to(host, port, password)
