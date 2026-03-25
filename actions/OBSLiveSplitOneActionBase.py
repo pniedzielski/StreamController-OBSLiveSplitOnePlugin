@@ -136,14 +136,12 @@ class OBSLiveSplitOneActionBase(ActionBase):
 
     def _update_status_label(self):
         if self.plugin_base.backend.get_connected():
-            log.debug("Connected - label")
             self.status_label.set_label(
                 self.plugin_base.lm.get("actions.base.status.connected")
             )
             self.status_label.remove_css_class("red")
             self.status_label.add_css_class("green")
         else:
-            log.debug("Not connected - label")
             self.status_label.set_label(
                 self.plugin_base.lm.get("actions.base.status.no-connection")
             )
