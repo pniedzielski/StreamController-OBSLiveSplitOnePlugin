@@ -10,6 +10,8 @@ from loguru import logger as log
 
 
 class OBSLiveSplitOneCore(ActionCore):
+    icon_keys = []
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -23,18 +25,36 @@ class OBSLiveSplitOneCore(ActionCore):
         if not self.plugin_base.backend.get_connected():
             self.reconnect_obs()
 
+        self.current_icon = None
+
+        self.plugin_base.asset_manager.icons.add_listener(self.on_icon_changed)
+
         self.create_event_assigners()
 
     def create_event_assigners(self):
         pass
 
     def on_ready(self):
-        self.set_media(
-            media_path=self.get_asset_path(self.get_icon_name())
-        )
+        self.display_icon()
 
     def get_icon_name(self) -> str:
-        return "livesplit.png"
+        return "livesplit"
+
+    def _effective_icon_name(self):
+        if self.icon_keys:
+            return self.current_icon or self.icon_keys[0]
+        return "livesplit"
+
+    def display_icon(self):
+        icon_name = self._effective_icon_name()
+        icon_asset = self.get_icon(icon_name)
+        if icon_asset:
+            _, rendered = icon_asset.get_values()
+            self.set_media(image=rendered)
+
+    def on_icon_changed(self, event, key, asset):
+        if key == self._effective_icon_name():
+            self.display_icon()
 
     def get_config_rows(self) -> list:
         self.websocket_settings = Adw.PreferencesGroup()

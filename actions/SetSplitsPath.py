@@ -12,11 +12,13 @@ from gi.repository import Gtk, Adw, Gio
 
 
 class SetSplitsPath(TimerSourceActionCore):
+    icon_keys = ["set-splits-path"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get_icon_name(self) -> str:
-        return "set-splits-path.png"
+        return "set-splits-path"
 
     def get_config_rows(self) -> list:
         self.splits_path_settings = Adw.PreferencesGroup()

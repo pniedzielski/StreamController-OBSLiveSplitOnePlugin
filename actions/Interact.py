@@ -7,11 +7,13 @@ from uuid import UUID
 
 
 class Interact(TimerSourceActionCore):
+    icon_keys = ["interact"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get_icon_name(self) -> str:
-        return "interact.png"
+        return "interact"
 
     def create_event_assigners(self):
         self.add_event_assigner(

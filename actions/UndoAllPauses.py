@@ -4,11 +4,13 @@ from src.backend.DeckManagement.InputIdentifier import Input
 
 
 class UndoAllPauses(OBSLiveSplitOneCore):
+    icon_keys = ["undo-all-pauses"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get_icon_name(self) -> str:
-        return "undo-all-pauses.png"
+        return "undo-all-pauses"
 
     def create_event_assigners(self):
         self.add_event_assigner(

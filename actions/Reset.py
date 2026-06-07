@@ -4,11 +4,13 @@ from src.backend.DeckManagement.InputIdentifier import Input
 
 
 class Reset(OBSLiveSplitOneCore):
+    icon_keys = ["reset"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get_icon_name(self) -> str:
-        return "reset.png"
+        return "reset"
 
     def create_event_assigners(self):
         self.add_event_assigner(

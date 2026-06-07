@@ -4,11 +4,13 @@ from src.backend.DeckManagement.InputIdentifier import Input
 
 
 class Skip(OBSLiveSplitOneCore):
+    icon_keys = ["skip"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get_icon_name(self) -> str:
-        return "skip.png"
+        return "skip"
 
     def create_event_assigners(self):
         self.add_event_assigner(

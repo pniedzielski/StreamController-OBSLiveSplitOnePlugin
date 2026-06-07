@@ -44,6 +44,15 @@ class OBSLiveSplitOnePlugin(PluginBase):
         self.lm = self.locale_manager
         self.lm.set_to_os_default()
 
+        # Register icons with AssetManager
+        icon_dir = os.path.join(self.PATH, "assets")
+        for icon_name in ["livesplit", "split", "skip", "undo", "next-comparison",
+                          "prev-comparison", "toggle-timing-method", "reset",
+                          "pause", "undo-all-pauses", "interact", "save-splits",
+                          "set-splits-path", "set-layout-path"]:
+            icon_path = os.path.join(icon_dir, f"{icon_name}.png")
+            self.add_icon(icon_name, icon_path)
+
         # Register plugin
         self.register(
             plugin_name = self.lm.get("plugin.name"),
@@ -58,9 +67,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=Split,
             action_id_suffix="Split",
             action_name=self.lm.get("actions.split.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "split.png")
-            ),
+            icon=self._get_action_icon("split"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -74,9 +81,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=Skip,
             action_id_suffix="Skip",
             action_name=self.lm.get("actions.skip.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "skip.png")
-            ),
+            icon=self._get_action_icon("skip"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -90,9 +95,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=Undo,
             action_id_suffix="Undo",
             action_name=self.lm.get("actions.undo.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "undo.png")
-            ),
+            icon=self._get_action_icon("undo"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -106,9 +109,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=NextComparison,
             action_id_suffix="NextComparison",
             action_name=self.lm.get("actions.next-comparison.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "next-comparison.png")
-            ),
+            icon=self._get_action_icon("next-comparison"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -122,9 +123,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=PrevComparison,
             action_id_suffix="PrevComparison",
             action_name=self.lm.get("actions.prev-comparison.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "prev-comparison.png")
-            ),
+            icon=self._get_action_icon("prev-comparison"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -138,9 +137,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=ToggleTimingMethod,
             action_id_suffix="ToggleTimingMethod",
             action_name=self.lm.get("actions.toggle-timing-method.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "toggle-timing-method.png")
-            ),
+            icon=self._get_action_icon("toggle-timing-method"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -154,9 +151,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=Reset,
             action_id_suffix="Reset",
             action_name=self.lm.get("actions.reset.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "reset.png")
-            ),
+            icon=self._get_action_icon("reset"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -170,9 +165,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=Pause,
             action_id_suffix="Pause",
             action_name=self.lm.get("actions.pause.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "pause.png")
-            ),
+            icon=self._get_action_icon("pause"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -186,9 +179,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=UndoAllPauses,
             action_id_suffix="UndoAllPauses",
             action_name=self.lm.get("actions.undo-all-pauses.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "undo-all-pauses.png")
-            ),
+            icon=self._get_action_icon("undo-all-pauses"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -202,9 +193,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=Interact,
             action_id_suffix="Interact",
             action_name=self.lm.get("actions.interact.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "interact.png")
-            ),
+            icon=self._get_action_icon("interact"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -218,9 +207,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=SaveSplits,
             action_id_suffix="SaveSplits",
             action_name=self.lm.get("actions.save-splits.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "save-splits.png")
-            ),
+            icon=self._get_action_icon("save-splits"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -234,9 +221,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=SetSplitsPath,
             action_id_suffix="SetSplitsPath",
             action_name=self.lm.get("actions.set-splits-path.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "set-splits-path.png")
-            ),
+            icon=self._get_action_icon("set-splits-path"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -250,9 +235,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             action_base=SetLayoutPath,
             action_id_suffix="SetLayoutPath",
             action_name=self.lm.get("actions.set-layout-path.name"),
-            icon=Gtk.Picture.new_for_filename(
-                os.path.join(self.PATH, "assets", "set-layout-path.png")
-            ),
+            icon=self._get_action_icon("set-layout-path"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
                 Input.Dial: ActionInputSupport.UNTESTED,
@@ -271,7 +254,18 @@ class OBSLiveSplitOnePlugin(PluginBase):
             log.error(e)
             return False
 
-    def get_selector_icon(self) -> Gtk.Widget:
+    def get_selector_icon(self):
+        icon_asset = self.asset_manager.icons.get_asset("livesplit")
+        if icon_asset and icon_asset._path:
+            return Gtk.Image.new_from_file(icon_asset._path)
         return Gtk.Image.new_from_file(
             os.path.join(self.PATH, "assets", "livesplit.png")
+        )
+
+    def _get_action_icon(self, icon_name):
+        icon_asset = self.asset_manager.icons.get_asset(icon_name)
+        if icon_asset and icon_asset._path:
+            return Gtk.Image.new_from_file(icon_asset._path)
+        return Gtk.Image.new_from_file(
+            os.path.join(self.PATH, "assets", f"{icon_name}.png")
         )

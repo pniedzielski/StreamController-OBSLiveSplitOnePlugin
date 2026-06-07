@@ -4,11 +4,13 @@ from src.backend.DeckManagement.InputIdentifier import Input
 
 
 class ToggleTimingMethod(OBSLiveSplitOneCore):
+    icon_keys = ["toggle-timing-method"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get_icon_name(self) -> str:
-        return "toggle-timing-method.png"
+        return "toggle-timing-method"
 
     def create_event_assigners(self):
         self.add_event_assigner(

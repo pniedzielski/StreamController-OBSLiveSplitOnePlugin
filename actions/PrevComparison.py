@@ -4,11 +4,13 @@ from src.backend.DeckManagement.InputIdentifier import Input
 
 
 class PrevComparison(OBSLiveSplitOneCore):
+    icon_keys = ["prev-comparison"]
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     def get_icon_name(self) -> str:
-        return "prev-comparison.png"
+        return "prev-comparison"
 
     def create_event_assigners(self):
         self.add_event_assigner(
