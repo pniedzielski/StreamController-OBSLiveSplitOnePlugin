@@ -3,6 +3,21 @@ import obsws_python as obs
 from loguru import logger as log
 from obsws_python.error import OBSSDKRequestError
 import uuid
+import logging
+import threading
+
+class _ThreadBoundFilter(logging.Filter):
+    """Temporarily suppress sub‑CRITICAL log records from the creating thread only."""
+
+    def __init__(self):
+        super().__init__()
+        self._thread_id = threading.get_ident()
+
+    def filter(self, record):
+        if threading.get_ident() == self._thread_id:
+            return record.levelno >= logging.CRITICAL
+        return True
+
 
 class Backend(BackendBase):
     def __init__(self):
@@ -52,6 +67,10 @@ class Backend(BackendBase):
             log.error("Invalid IP address for OBS connection")
             return False
 
+        obs_logger = logging.getLogger("obsws_python")
+        obs_filter = _ThreadBoundFilter()
+        obs_logger.addFilter(obs_filter)
+
         try:
             log.debug("Trying to connect to OBS")
             self.obs_client = obs.ReqClient(
@@ -63,10 +82,19 @@ class Backend(BackendBase):
             self.connected = True
             log.info("Successfully connected to OBS")
             return True
+        except ConnectionRefusedError as e:
+            # This happens when OBS is not running, which is common
+            # and handled correctly here.  Make it a warning rather
+            # than an error.
+            log.warning(f"Could not connect to OBS: {e}")
+            self.connected = False
+            return False
         except Exception as e:
             log.error(f"Failed to connect to OBS: {e}")
             self.connected = False
             return False
+        finally:
+            obs_logger.removeFilter(obs_filter)
 
     def get_connected(self) -> bool:
         return self.connected
