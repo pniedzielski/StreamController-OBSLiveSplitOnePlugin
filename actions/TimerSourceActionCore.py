@@ -88,12 +88,12 @@ class TimerSourceActionCore(OBSLiveSplitOneCore):
             self.set_settings(settings)
 
     def _populate_source_model(self):
+        self.source_model = Gio.ListStore()
+
         if not self.plugin_base.get_connected():
             self.reconnect_obs()
         if not self.plugin_base.get_connected():
             return
-
-        self.source_model = Gio.ListStore()
         sources = sorted(
             self.plugin_base.backend.get_all_livesplit_one_sources(),
             key=lambda source: source["name"]
