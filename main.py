@@ -29,7 +29,7 @@ from .actions.SetLayoutPath import SetLayoutPath
 
 class OBSLiveSplitOnePlugin(PluginBase):
     def __init__(self):
-        super().__init__()
+        super().__init__(use_legacy_locale=False)
 
         # Launch backend
         print("Launching backend")

@@ -1,0 +1,37 @@
+key;en_US
+plugin.name;OBS LiveSplit One
+actions.split.name;Split
+actions.undo.name;Undo Last Split
+actions.skip.name;Skip Current Split
+actions.next-comparison.name;Next Comparison
+actions.prev-comparison.name;Previous Comparison
+actions.toggle-timing-method.name;Toggle Timing Method
+actions.reset.name;Reset Timer
+actions.pause.name;Pause Timer
+actions.undo-all-pauses.name;Undo All Timer Pauses
+actions.interact.name;Interact with Timer Source
+actions.save-splits.name;Save Splits
+actions.set-splits-path.name;Set Splits File
+actions.set-layout-path.name;Set Layout File
+actions.base.status.no-connection;Could not connect to OBS.
+actions.base.status.connected;Successfully connected to OBS.
+actions.base.websocket-group.title;OBS WebSocket Server
+actions.base.websocket-group.description;Provide the connection information to your OBS WebSocket server.  This will be shared across all OBS LiveSplit One actions.
+actions.base.ip.label;IP:
+actions.base.port.label;Port:
+actions.base.password.label;Password:
+actions.timer-source-base.preferences-group.title;Timer Source
+actions.timer-source-base.preferences-group.description;Select an OBS LiveSplit One source to operate on if more than one source is present.
+actions.timer-source-base.source.label;Name:
+actions.set-splits-path.preferences-group.title;Splits To Load
+actions.set-splits-path.preferences-group.description;Select LiveSplit splits file to load.
+actions.set-splits-path.path.label;Path:
+actions.set-splits-path.button.label;Browse
+actions.set-splits-path.dialog.title;Select Splits File
+actions.set-splits-path.dialog.accept.label;Select
+actions.set-layout-path.preferences-group.title;Layout To Load
+actions.set-layout-path.preferences-group.description;Select LiveSplit layout file to load.
+actions.set-layout-path.path.label;Path:
+actions.set-layout-path.button.label;Browse
+actions.set-layout-path.dialog.title;Select Layout File
+actions.set-layout-path.dialog.accept.label;Select
