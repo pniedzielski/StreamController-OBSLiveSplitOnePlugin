@@ -3,7 +3,7 @@ from src.backend.PluginManager.ActionCore import ActionCore
 import gi
 gi.require_version("Gtk", "4.0")
 gi.require_version("Adw", "1")
-from gi.repository import Gtk, Adw
+from gi.repository import Gtk
 
 import threading
 from loguru import logger as log
@@ -57,84 +57,7 @@ class OBSLiveSplitOneCore(ActionCore):
             self.display_icon()
 
     def get_config_rows(self) -> list:
-        self.websocket_settings = Adw.PreferencesGroup()
-        self.websocket_settings.set_title(
-            self.plugin_base.lm.get("actions.base.websocket-group.title")
-        )
-        self.websocket_settings.set_description(
-            self.plugin_base.lm.get(
-                "actions.base.websocket-group.description"
-            )
-        )
-        self.websocket_settings.set_margin_top(10)
-        self.websocket_settings.set_margin_bottom(10)
-
-        self.ip_entry = Adw.EntryRow(
-            title=self.plugin_base.lm.get("actions.base.ip.label")
-        )
-        self.ip_entry.set_show_apply_button(True)
-        self.websocket_settings.add(self.ip_entry)
-        self.port_spinner = Adw.SpinRow.new_with_range(0, 65535, 1)
-        self.port_spinner.set_title(
-            self.plugin_base.lm.get("actions.base.port.label")
-        )
-        self.websocket_settings.add(self.port_spinner)
-        self.password_entry = Adw.PasswordEntryRow(
-            title=self.plugin_base.lm.get("actions.base.password.label")
-        )
-        self.password_entry.set_show_apply_button(True)
-        self.websocket_settings.add(self.password_entry)
-
-        self.load_config_defaults()
-
-        self.ip_entry.connect("notify::text", self.on_change_ip)
-        self.port_spinner.connect("notify::value", self.on_change_port)
-        self.password_entry.connect("notify::text", self.on_change_password)
-
-        return [self.websocket_settings]
-
-    def load_config_defaults(self):
-        settings = self.plugin_base.get_settings()
-        ip = settings.setdefault("ip", "localhost")
-        port = settings.setdefault("port", 4455)
-        password = settings.setdefault("password", "")
-
-        self.ip_entry.set_text(ip)
-        self.port_spinner.set_value(port)
-        self.password_entry.set_text(password)
-        self.update_ip_warning_status()
-        self.update_status_label()
-
-    def on_change_ip(self, entry, *args):
-        settings = self.plugin_base.get_settings()
-        settings["ip"] = self.ip_entry.get_text().strip()
-        self.plugin_base.set_settings(settings)
-
-        self.update_ip_warning_status()
-        self.reconnect_obs()
-
-    def update_ip_warning_status(self):
-        valid = self.plugin_base.backend.validate_host(
-            self.ip_entry.get_text().strip()
-        )
-        if valid:
-            self.ip_entry.remove_css_class("error")
-        else:
-            self.ip_entry.add_css_class("error")
-
-    def on_change_port(self, spinner, *args):
-        settings = self.plugin_base.get_settings()
-        settings["port"] = int(spinner.get_value())
-        self.plugin_base.set_settings(settings)
-
-        self.reconnect_obs()
-
-    def on_change_password(self, entry, *args):
-        settings = self.plugin_base.get_settings()
-        settings["password"] = entry.get_text()
-        self.plugin_base.set_settings(settings)
-
-        self.reconnect_obs()
+        return []
 
     def reconnect_obs(self):
         threading.Thread(
