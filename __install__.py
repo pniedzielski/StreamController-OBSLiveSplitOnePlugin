@@ -4,5 +4,5 @@ from os.path import join, abspath, dirname
 toplevel = dirname(abspath(__file__))
 create_venv(
     join(toplevel, "backend", ".venv"),
-    join(toplevel, "backend", "requirements.txt"),
+    join(toplevel, "assets", "requirements.txt"),
 )
