@@ -26,12 +26,12 @@ class TimerSourceActionCore(OBSLiveSplitOneCore):
     def get_config_rows(self) -> list:
         self.timer_source_base_settings = Adw.PreferencesGroup()
         self.timer_source_base_settings.set_title(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.timer-source-base.preferences-group.title"
             )
         )
         self.timer_source_base_settings.set_description(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.timer-source-base.preferences-group.description"
             )
         )
@@ -39,7 +39,7 @@ class TimerSourceActionCore(OBSLiveSplitOneCore):
         self.timer_source_base_settings.set_margin_bottom(10)
 
         self.source_entry = Adw.ComboRow(
-            title=self.plugin_base.lm.get(
+            title=self.plugin_base.locale_manager.get(
                 "actions.timer-source-base.source.label"
             )
         )

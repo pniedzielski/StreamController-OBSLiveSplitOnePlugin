@@ -41,8 +41,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
         print("Backend launched")
 
         # Setup locales
-        self.lm = self.locale_manager
-        self.lm.set_to_os_default()
+        self.locale_manager.set_to_os_default()
 
         # Register icons with AssetManager
         icon_dir = os.path.join(self.PATH, "assets")
@@ -55,7 +54,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
 
         # Register plugin
         self.register(
-            plugin_name = self.lm.get("plugin.name"),
+            plugin_name = self.locale_manager.get("plugin.name"),
             github_repo = "https://github.com/pniedzielski/StreamController-OBSLiveSplitOnePlugin",
             plugin_version = "1.2.0",
             app_version = "1.5.0-beta"
@@ -66,7 +65,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=Split,
             action_id_suffix="Split",
-            action_name=self.lm.get("actions.split.name"),
+            action_name=self.locale_manager.get("actions.split.name"),
             icon=self._get_action_icon("split"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -80,7 +79,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=Skip,
             action_id_suffix="Skip",
-            action_name=self.lm.get("actions.skip.name"),
+            action_name=self.locale_manager.get("actions.skip.name"),
             icon=self._get_action_icon("skip"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -94,7 +93,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=Undo,
             action_id_suffix="Undo",
-            action_name=self.lm.get("actions.undo.name"),
+            action_name=self.locale_manager.get("actions.undo.name"),
             icon=self._get_action_icon("undo"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -108,7 +107,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=NextComparison,
             action_id_suffix="NextComparison",
-            action_name=self.lm.get("actions.next-comparison.name"),
+            action_name=self.locale_manager.get("actions.next-comparison.name"),
             icon=self._get_action_icon("next-comparison"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -122,7 +121,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=PrevComparison,
             action_id_suffix="PrevComparison",
-            action_name=self.lm.get("actions.prev-comparison.name"),
+            action_name=self.locale_manager.get("actions.prev-comparison.name"),
             icon=self._get_action_icon("prev-comparison"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -136,7 +135,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=ToggleTimingMethod,
             action_id_suffix="ToggleTimingMethod",
-            action_name=self.lm.get("actions.toggle-timing-method.name"),
+            action_name=self.locale_manager.get("actions.toggle-timing-method.name"),
             icon=self._get_action_icon("toggle-timing-method"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -150,7 +149,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=Reset,
             action_id_suffix="Reset",
-            action_name=self.lm.get("actions.reset.name"),
+            action_name=self.locale_manager.get("actions.reset.name"),
             icon=self._get_action_icon("reset"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -164,7 +163,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=Pause,
             action_id_suffix="Pause",
-            action_name=self.lm.get("actions.pause.name"),
+            action_name=self.locale_manager.get("actions.pause.name"),
             icon=self._get_action_icon("pause"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -178,7 +177,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=UndoAllPauses,
             action_id_suffix="UndoAllPauses",
-            action_name=self.lm.get("actions.undo-all-pauses.name"),
+            action_name=self.locale_manager.get("actions.undo-all-pauses.name"),
             icon=self._get_action_icon("undo-all-pauses"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -192,7 +191,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=Interact,
             action_id_suffix="Interact",
-            action_name=self.lm.get("actions.interact.name"),
+            action_name=self.locale_manager.get("actions.interact.name"),
             icon=self._get_action_icon("interact"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -206,7 +205,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=SaveSplits,
             action_id_suffix="SaveSplits",
-            action_name=self.lm.get("actions.save-splits.name"),
+            action_name=self.locale_manager.get("actions.save-splits.name"),
             icon=self._get_action_icon("save-splits"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -220,7 +219,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=SetSplitsPath,
             action_id_suffix="SetSplitsPath",
-            action_name=self.lm.get("actions.set-splits-path.name"),
+            action_name=self.locale_manager.get("actions.set-splits-path.name"),
             icon=self._get_action_icon("set-splits-path"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
@@ -234,7 +233,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
             plugin_base=self,
             action_base=SetLayoutPath,
             action_id_suffix="SetLayoutPath",
-            action_name=self.lm.get("actions.set-layout-path.name"),
+            action_name=self.locale_manager.get("actions.set-layout-path.name"),
             icon=self._get_action_icon("set-layout-path"),
             action_support={
                 Input.Key: ActionInputSupport.SUPPORTED,
