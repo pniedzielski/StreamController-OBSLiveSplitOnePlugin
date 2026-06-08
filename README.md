@@ -21,10 +21,10 @@ In the future we plan to support configuring auto-splitters.
 This plugin uses the OBS websocket interface to interact with a
 LiveSplit One timer inside your OBS instance.  To use this plugin,
 first enable the websocket server in OBS (Tools > Websocket Server
-Settings) and create a LiveSplit One source.  Configure any action
-from this StreamController plugin with the server host, the server
-port, and the optional server password, and the websocket connection
-will be shared with all other actions.
+Settings) and create a LiveSplit One source.  Open this plugin's
+settings in StreamController and provide the server host, port, and
+optional server password.  The websocket connection will be shared
+by all actions.
 
 ## Actions
 
