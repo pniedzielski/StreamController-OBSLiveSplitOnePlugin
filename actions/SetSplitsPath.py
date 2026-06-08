@@ -23,12 +23,12 @@ class SetSplitsPath(TimerSourceActionCore):
     def get_config_rows(self) -> list:
         self.splits_path_settings = Adw.PreferencesGroup()
         self.splits_path_settings.set_title(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-splits-path.preferences-group.title"
             )
         )
         self.splits_path_settings.set_description(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-splits-path.preferences-group.description"
             )
         )
@@ -36,12 +36,12 @@ class SetSplitsPath(TimerSourceActionCore):
         self.splits_path_settings.set_margin_bottom(10)
 
         self.splits_path_entry = Adw.EntryRow(
-            title=self.plugin_base.lm.get(
+            title=self.plugin_base.locale_manager.get(
                 "actions.set-splits-path.path.label"
             )
         )
         self.splits_path_button = Gtk.Button(
-            label=self.plugin_base.lm.get(
+            label=self.plugin_base.locale_manager.get(
                 "actions.set-splits-path.button.label"
             )
         )
@@ -50,12 +50,12 @@ class SetSplitsPath(TimerSourceActionCore):
 
         self.splits_path_dialog = Gtk.FileDialog()
         self.splits_path_dialog.set_title(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-splits-path.dialog.title"
             )
         )
         self.splits_path_dialog.set_accept_label(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-splits-path.dialog.accept.label"
             )
         )
