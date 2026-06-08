@@ -26,6 +26,7 @@ from .actions.Interact import Interact
 from .actions.SaveSplits import SaveSplits
 from .actions.SetSplitsPath import SetSplitsPath
 from .actions.SetLayoutPath import SetLayoutPath
+from .settings import PluginSettings
 
 class OBSLiveSplitOnePlugin(PluginBase):
     def __init__(self):
@@ -51,6 +52,10 @@ class OBSLiveSplitOnePlugin(PluginBase):
                           "set-splits-path", "set-layout-path"]:
             icon_path = os.path.join(icon_dir, f"{icon_name}.png")
             self.add_icon(icon_name, icon_path)
+
+        # Setup plugin-level settings
+        self.plugin_settings = None
+        self.has_plugin_settings = True
 
         # Register plugin
         self.register(
@@ -280,3 +285,8 @@ class OBSLiveSplitOnePlugin(PluginBase):
         return Gtk.Image.new_from_file(
             os.path.join(self.PATH, "assets", f"{icon_name}.png")
         )
+
+    def get_settings_area(self):
+        if self.plugin_settings is None:
+            self.plugin_settings = PluginSettings(self)
+        return self.plugin_settings.get_ui()
