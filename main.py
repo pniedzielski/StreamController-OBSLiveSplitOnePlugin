@@ -34,7 +34,7 @@ class OBSLiveSplitOnePlugin(PluginBase):
         # Launch backend
         print("Launching backend")
         self.launch_backend(
-            os.path.join(self.PATH, "backend", "backend.py"),
+            os.path.join(self.PATH, "backend.py"),
             os.path.join(self.PATH, "backend", ".venv"),
             open_in_terminal=False,
         )
