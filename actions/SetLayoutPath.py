@@ -23,12 +23,12 @@ class SetLayoutPath(TimerSourceActionCore):
     def get_config_rows(self) -> list:
         self.layout_path_settings = Adw.PreferencesGroup()
         self.layout_path_settings.set_title(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-layout-path.preferences-group.title"
             )
         )
         self.layout_path_settings.set_description(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-layout-path.preferences-group.description"
             )
         )
@@ -36,12 +36,12 @@ class SetLayoutPath(TimerSourceActionCore):
         self.layout_path_settings.set_margin_bottom(10)
 
         self.layout_path_entry = Adw.EntryRow(
-            title=self.plugin_base.lm.get(
+            title=self.plugin_base.locale_manager.get(
                 "actions.set-layout-path.path.label"
             )
         )
         self.layout_path_button = Gtk.Button(
-            label=self.plugin_base.lm.get(
+            label=self.plugin_base.locale_manager.get(
                 "actions.set-layout-path.button.label"
             )
         )
@@ -50,12 +50,12 @@ class SetLayoutPath(TimerSourceActionCore):
 
         self.layout_path_dialog = Gtk.FileDialog()
         self.layout_path_dialog.set_title(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-layout-path.dialog.title"
             )
         )
         self.layout_path_dialog.set_accept_label(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.set-layout-path.dialog.accept.label"
             )
         )

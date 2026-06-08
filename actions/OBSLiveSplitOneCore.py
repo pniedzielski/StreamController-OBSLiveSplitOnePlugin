@@ -18,7 +18,7 @@ class OBSLiveSplitOneCore(ActionCore):
         self.has_configuration = True
 
         self.status_label = Gtk.Label(
-            label=self.plugin_base.lm.get("actions.base.status.no-connection"),
+            label=self.plugin_base.locale_manager.get("actions.base.status.no-connection"),
             css_classes=["bold", "red"]
         )
 
@@ -59,10 +59,10 @@ class OBSLiveSplitOneCore(ActionCore):
     def get_config_rows(self) -> list:
         self.websocket_settings = Adw.PreferencesGroup()
         self.websocket_settings.set_title(
-            self.plugin_base.lm.get("actions.base.websocket-group.title")
+            self.plugin_base.locale_manager.get("actions.base.websocket-group.title")
         )
         self.websocket_settings.set_description(
-            self.plugin_base.lm.get(
+            self.plugin_base.locale_manager.get(
                 "actions.base.websocket-group.description"
             )
         )
@@ -70,17 +70,17 @@ class OBSLiveSplitOneCore(ActionCore):
         self.websocket_settings.set_margin_bottom(10)
 
         self.ip_entry = Adw.EntryRow(
-            title=self.plugin_base.lm.get("actions.base.ip.label")
+            title=self.plugin_base.locale_manager.get("actions.base.ip.label")
         )
         self.ip_entry.set_show_apply_button(True)
         self.websocket_settings.add(self.ip_entry)
         self.port_spinner = Adw.SpinRow.new_with_range(0, 65535, 1)
         self.port_spinner.set_title(
-            self.plugin_base.lm.get("actions.base.port.label")
+            self.plugin_base.locale_manager.get("actions.base.port.label")
         )
         self.websocket_settings.add(self.port_spinner)
         self.password_entry = Adw.PasswordEntryRow(
-            title=self.plugin_base.lm.get("actions.base.password.label")
+            title=self.plugin_base.locale_manager.get("actions.base.password.label")
         )
         self.password_entry.set_show_apply_button(True)
         self.websocket_settings.add(self.password_entry)
@@ -167,13 +167,13 @@ class OBSLiveSplitOneCore(ActionCore):
     def _update_status_label(self):
         if self.plugin_base.backend.get_connected():
             self.status_label.set_label(
-                self.plugin_base.lm.get("actions.base.status.connected")
+                self.plugin_base.locale_manager.get("actions.base.status.connected")
             )
             self.status_label.remove_css_class("red")
             self.status_label.add_css_class("green")
         else:
             self.status_label.set_label(
-                self.plugin_base.lm.get("actions.base.status.no-connection")
+                self.plugin_base.locale_manager.get("actions.base.status.no-connection")
             )
             self.status_label.remove_css_class("green")
             self.status_label.add_css_class("red")
