@@ -25,6 +25,8 @@ class Backend(BackendBase):
 
         self.obs_client = None
         self.connected = False
+        self._client_lock = threading.RLock()
+        self._reconnecting_lock = threading.Lock()
 
         self.connect()
 
@@ -44,17 +46,27 @@ class Backend(BackendBase):
 
         return self.connect_to(host, port, password)
 
-    def disconnect(self):
-        if not self.get_connected():
-            return
+    def _close_client(self, client) -> bool:
+        if client is None:
+            return True
 
         try:
-            self.obs_client.disconnect()
-            log.info("Successfully disconnected from OBS")
+            client.disconnect()
+            return True
         except Exception as e:
-            log.error(f"Failed to disconnect from OBS: {e}")
-        finally:
+            log.warning(f"Failed to disconnect from OBS: {e}")
+            return False
+
+    def disconnect(self):
+        with self._client_lock:
+            client = self.obs_client
+            self.obs_client = None
             self.connected = False
+            closed = self._close_client(client)
+
+        if client is not None and closed:
+            log.info("Successfully disconnected from OBS")
+
 
     def connect_to(
             self,
@@ -67,49 +79,62 @@ class Backend(BackendBase):
             log.error("Invalid IP address for OBS connection")
             return False
 
-        obs_logger = logging.getLogger("obsws_python")
-        obs_filter = _ThreadBoundFilter()
-        obs_logger.addFilter(obs_filter)
+        if not self._reconnecting_lock.acquire(blocking=False):
+            log.debug("Already reconnecting; skipping duplicate attempt")
+            return False
 
         try:
-            log.debug("Trying to connect to OBS")
-            self.obs_client = obs.ReqClient(
-                host=host,
-                port=port,
-                password=password,
-                timeout=timeout,
-            )
-            self.connected = True
-            log.info("Successfully connected to OBS")
-            return True
-        except ConnectionRefusedError as e:
-            # This happens when OBS is not running, which is common
-            # and handled correctly here.  Make it a warning rather
-            # than an error.
-            log.warning(f"Could not connect to OBS: {e}")
-            self.connected = False
-            return False
-        except Exception as e:
-            log.error(f"Failed to connect to OBS: {e}")
-            self.connected = False
-            return False
+            with self._client_lock:
+                old_client = self.obs_client
+                self.obs_client = None
+                self.connected = False
+                self._close_client(old_client)
+
+                obs_logger = logging.getLogger("obsws_python")
+                obs_filter = _ThreadBoundFilter()
+                obs_logger.addFilter(obs_filter)
+
+                try:
+                    log.debug("Trying to connect to OBS")
+                    self.obs_client = obs.ReqClient(
+                        host=host,
+                        port=port,
+                        password=password,
+                        timeout=timeout,
+                    )
+                    self.connected = True
+                    log.info("Successfully connected to OBS")
+                    return True
+                except ConnectionRefusedError as e:
+                    log.warning(f"Could not connect to OBS: {e}")
+                    self.obs_client = None
+                    self.connected = False
+                    return False
+                except Exception as e:
+                    log.error(f"Failed to connect to OBS: {e}")
+                    self.obs_client = None
+                    self.connected = False
+                    return False
+                finally:
+                    obs_logger.removeFilter(obs_filter)
         finally:
-            obs_logger.removeFilter(obs_filter)
+            self._reconnecting_lock.release()
 
     def get_connected(self) -> bool:
         return self.connected
 
     def _trigger_hotkey_by_name(self, name: str):
-        if not self.get_connected():
-            return
+        with self._client_lock:
+            if not self.get_connected():
+                return
 
-        try:
-            self.obs_client.trigger_hotkey_by_name(name)
-        except obs.error.OBSSDKRequestError as e:
-            log.error(f"OBS returned an error: {e}")
-        except Exception as e:
-            log.error(f"Fatal error: {e}")
-            self.connected = False
+            try:
+                self.obs_client.trigger_hotkey_by_name(name)
+            except obs.error.OBSSDKRequestError as e:
+                log.error(f"OBS returned an error: {e}")
+            except Exception as e:
+                log.error(f"Fatal error: {e}")
+                self.connected = False
 
     def split(self):
         self._trigger_hotkey_by_name("hotkey_split")
@@ -139,104 +164,109 @@ class Backend(BackendBase):
         self._trigger_hotkey_by_name("hotkey_undo_all_pauses")
 
     def get_all_livesplit_one_sources(self):
-        if not self.get_connected():
-            return
+        with self._client_lock:
+            if not self.get_connected():
+                return
 
-        try:
-            resp = self.obs_client.get_input_list(
-                kind="livesplit-one"
-            )
-            return [
-                {
-                    "name": source["inputName"],
-                    "uuid": uuid.UUID(source["inputUuid"]),
-                }
-                for source in resp.inputs
-            ]
-        except obs.error.OBSSDKRequestError as e:
-            log.error(f"OBS returned an error: {e}")
-        except Exception as e:
-            log.error(f"Fatal error: {e}")
-            self.connected = False
+            try:
+                resp = self.obs_client.get_input_list(
+                    kind="livesplit-one"
+                )
+                return [
+                    {
+                        "name": source["inputName"],
+                        "uuid": uuid.UUID(source["inputUuid"]),
+                    }
+                    for source in resp.inputs
+                ]
+            except obs.error.OBSSDKRequestError as e:
+                log.error(f"OBS returned an error: {e}")
+            except Exception as e:
+                log.error(f"Fatal error: {e}")
+                self.connected = False
 
     def interact_with_livesplit_one_source(self, uuid: uuid.UUID):
-        if not self.get_connected():
-            return
+        with self._client_lock:
+            if not self.get_connected():
+                return
 
-        try:
-            # The OBS websocket client does not provide a wrapper for
-            # opening the interaction dialog box by UUID, only by
-            # name, so call the request manually.
-            self.obs_client.send(
-                "OpenInputInteractDialog",
-                {"inputUuid": str(uuid)},
-            )
-        except obs.error.OBSSDKRequestError as e:
-            log.error(f"OBS returned an error: {e}")
-        except Exception as e:
-            log.error(f"Fatal error: {e}")
-            self.connected = False
+            try:
+                # The OBS websocket client does not provide a wrapper for
+                # opening the interaction dialog box by UUID, only by
+                # name, so call the request manually.
+                self.obs_client.send(
+                    "OpenInputInteractDialog",
+                    {"inputUuid": str(uuid)},
+                )
+            except obs.error.OBSSDKRequestError as e:
+                log.error(f"OBS returned an error: {e}")
+            except Exception as e:
+                log.error(f"Fatal error: {e}")
+                self.connected = False
 
     def save_splits(self, uuid: uuid.UUID):
-        if not self.get_connected():
-            return
+        with self._client_lock:
+            if not self.get_connected():
+                return
 
-        try:
-            # The OBS websocket client does not provide a wrapper for
-            # editing a property by UUID, only by name, so call the
-            # request manually.
-            self.obs_client.send(
-                "PressInputPropertiesButton",
-                {"inputUuid": str(uuid), "propertyName": "save_splits"},
-            )
-        except obs.error.OBSSDKRequestError as e:
-            log.error(f"OBS returned an error: {e}")
-        except Exception as e:
-            log.error(f"Fatal error: {e}")
-            self.connected = False
+            try:
+                # The OBS websocket client does not provide a wrapper for
+                # editing a property by UUID, only by name, so call the
+                # request manually.
+                self.obs_client.send(
+                    "PressInputPropertiesButton",
+                    {"inputUuid": str(uuid), "propertyName": "save_splits"},
+                )
+            except obs.error.OBSSDKRequestError as e:
+                log.error(f"OBS returned an error: {e}")
+            except Exception as e:
+                log.error(f"Fatal error: {e}")
+                self.connected = False
 
     def set_splits_path(self, uuid: uuid.UUID, path: str):
-        if not self.get_connected():
-            return
+        with self._client_lock:
+            if not self.get_connected():
+                return
 
-        try:
-            # The OBS websocket client does not provide a wrapper for
-            # editing a property by UUID, only by name, so call the
-            # request manually.
-            self.obs_client.send(
-                "SetInputSettings",
-                {
-                    "inputUuid": str(uuid),
-                    "inputSettings": {"splits_path": path},
-                    "overlay": True
-                },
-            )
-        except obs.error.OBSSDKRequestError as e:
-            log.error(f"OBS returned an error: {e}")
-        except Exception as e:
-            log.error(f"Fatal error: {e}")
-            self.connected = False
+            try:
+                # The OBS websocket client does not provide a wrapper for
+                # editing a property by UUID, only by name, so call the
+                # request manually.
+                self.obs_client.send(
+                    "SetInputSettings",
+                    {
+                        "inputUuid": str(uuid),
+                        "inputSettings": {"splits_path": path},
+                        "overlay": True
+                    },
+                )
+            except obs.error.OBSSDKRequestError as e:
+                log.error(f"OBS returned an error: {e}")
+            except Exception as e:
+                log.error(f"Fatal error: {e}")
+                self.connected = False
 
     def set_layout_path(self, uuid: uuid.UUID, path: str):
-        if not self.get_connected():
-            return
+        with self._client_lock:
+            if not self.get_connected():
+                return
 
-        try:
-            # The OBS websocket client does not provide a wrapper for
-            # editing a property by UUID, only by name, so call the
-            # request manually.
-            self.obs_client.send(
-                "SetInputSettings",
-                {
-                    "inputUuid": str(uuid),
-                    "inputSettings": {"layout_path": path},
-                    "overlay": True
-                },
-            )
-        except obs.error.OBSSDKRequestError as e:
-            log.error(f"OBS returned an error: {e}")
-        except Exception as e:
-            log.error(f"Fatal error: {e}")
-            self.connected = False
+            try:
+                # The OBS websocket client does not provide a wrapper for
+                # editing a property by UUID, only by name, so call the
+                # request manually.
+                self.obs_client.send(
+                    "SetInputSettings",
+                    {
+                        "inputUuid": str(uuid),
+                        "inputSettings": {"layout_path": path},
+                        "overlay": True
+                    },
+                )
+            except obs.error.OBSSDKRequestError as e:
+                log.error(f"OBS returned an error: {e}")
+            except Exception as e:
+                log.error(f"Fatal error: {e}")
+                self.connected = False
 
 backend = Backend()
