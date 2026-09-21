@@ -56,6 +56,13 @@ class Backend(BackendBase):
         except Exception as e:
             log.warning(f"Failed to disconnect from OBS: {e}")
             return False
+    def _mark_disconnected(self):
+        with self._client_lock:
+            client = self.obs_client
+            self.obs_client = None
+            self.connected = False
+            self._close_client(client)
+
 
     def disconnect(self):
         with self._client_lock:
@@ -134,7 +141,7 @@ class Backend(BackendBase):
                 log.error(f"OBS returned an error: {e}")
             except Exception as e:
                 log.error(f"Fatal error: {e}")
-                self.connected = False
+                self._mark_disconnected()
 
     def split(self):
         self._trigger_hotkey_by_name("hotkey_split")
@@ -183,7 +190,7 @@ class Backend(BackendBase):
                 log.error(f"OBS returned an error: {e}")
             except Exception as e:
                 log.error(f"Fatal error: {e}")
-                self.connected = False
+                self._mark_disconnected()
 
     def interact_with_livesplit_one_source(self, uuid: uuid.UUID):
         with self._client_lock:
@@ -202,7 +209,7 @@ class Backend(BackendBase):
                 log.error(f"OBS returned an error: {e}")
             except Exception as e:
                 log.error(f"Fatal error: {e}")
-                self.connected = False
+                self._mark_disconnected()
 
     def save_splits(self, uuid: uuid.UUID):
         with self._client_lock:
@@ -221,7 +228,7 @@ class Backend(BackendBase):
                 log.error(f"OBS returned an error: {e}")
             except Exception as e:
                 log.error(f"Fatal error: {e}")
-                self.connected = False
+                self._mark_disconnected()
 
     def set_splits_path(self, uuid: uuid.UUID, path: str):
         with self._client_lock:
@@ -244,7 +251,7 @@ class Backend(BackendBase):
                 log.error(f"OBS returned an error: {e}")
             except Exception as e:
                 log.error(f"Fatal error: {e}")
-                self.connected = False
+                self._mark_disconnected()
 
     def set_layout_path(self, uuid: uuid.UUID, path: str):
         with self._client_lock:
@@ -267,6 +274,6 @@ class Backend(BackendBase):
                 log.error(f"OBS returned an error: {e}")
             except Exception as e:
                 log.error(f"Fatal error: {e}")
-                self.connected = False
+                self._mark_disconnected()
 
 backend = Backend()
