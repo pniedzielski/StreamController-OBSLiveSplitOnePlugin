@@ -58,12 +58,6 @@ class OBSLiveSplitOneCore(ActionCore):
         if key == self._effective_icon_name():
             self.display_icon()
 
-    def get_config_rows(self) -> list:
-        self.load_config_defaults()
-        return []
-
-    def load_config_defaults(self):
-        pass
 
     def reconnect_obs(self):
         threading.Thread(

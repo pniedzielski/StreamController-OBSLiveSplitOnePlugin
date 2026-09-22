@@ -64,6 +64,7 @@ class SetLayoutPath(TimerSourceActionCore):
         self.layout_path_dialog.set_default_filter(file_filter)
 
         base_rows = super().get_config_rows()
+        self.load_config_defaults()
 
         # Connect signals
         self.layout_path_entry.connect(
@@ -78,8 +79,6 @@ class SetLayoutPath(TimerSourceActionCore):
         return [self.layout_path_settings, *base_rows]
 
     def load_config_defaults(self):
-        super().load_config_defaults()
-
         settings = self.get_settings()
         layout_path = settings.get("layout-path")
 
