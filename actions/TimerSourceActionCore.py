@@ -47,14 +47,14 @@ class TimerSourceActionCore(OBSLiveSplitOneCore):
         self.timer_source_base_settings.add(self.source_entry)
 
         base_rows = super().get_config_rows()
+        self._load_timer_source_defaults()
 
         self.source_entry.connect("notify::selected", self.on_change_source)
 
         return [self.timer_source_base_settings, *base_rows]
 
-    def load_config_defaults(self):
-        super().load_config_defaults()
 
+    def _load_timer_source_defaults(self):
         settings = self.get_settings()
         source_uuid = settings.get("source-uuid")
 
