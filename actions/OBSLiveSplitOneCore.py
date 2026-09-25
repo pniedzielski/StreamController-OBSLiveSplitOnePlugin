@@ -38,6 +38,9 @@ class OBSLiveSplitOneCore(ActionCore):
 
     def on_ready(self):
         self.display_icon()
+        self.plugin_base.connection_status_event.add_listener(
+            self._on_connection_status
+        )
 
     def get_icon_name(self) -> str:
         return "livesplit"
@@ -80,7 +83,7 @@ class OBSLiveSplitOneCore(ActionCore):
         if hasattr(self, "status_label"):
             self.update_status_label()
 
-    def update_status_label(self) -> None:
+    def update_status_label(self):
         threading.Thread(
             target=self._update_status_label,
             daemon=True,
@@ -109,8 +112,19 @@ class OBSLiveSplitOneCore(ActionCore):
         self.update_status_label()
         return self.status_label
 
+    def _on_connection_status(self, event_data):
+        self.update_status_label()
+
     def ensure_connection(self) -> bool:
         if not self.plugin_base.backend.get_connected():
             self.reconnect_obs()
             return False
         return True
+
+    def on_remove(self):
+        self.plugin_base.connection_status_event.remove_listener(
+            self._on_connection_status
+        )
+        self.plugin_base.asset_manager.icons.remove_listener(
+            self.on_icon_changed
+        )

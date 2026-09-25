@@ -6,6 +6,7 @@ import uuid
 import logging
 import threading
 
+
 class _ThreadBoundFilter(logging.Filter):
     """Temporarily suppress sub‑CRITICAL log records from the creating thread only."""
 
@@ -27,6 +28,7 @@ class Backend(BackendBase):
         self.connected = False
         self._client_lock = threading.RLock()
         self._reconnecting_lock = threading.Lock()
+        self._last_notified_state = None
 
         self.connect()
 
@@ -56,13 +58,14 @@ class Backend(BackendBase):
         except Exception as e:
             log.warning(f"Failed to disconnect from OBS: {e}")
             return False
+
     def _mark_disconnected(self):
         with self._client_lock:
             client = self.obs_client
             self.obs_client = None
             self.connected = False
             self._close_client(client)
-
+        self._notify_connection_state(False)
 
     def disconnect(self):
         with self._client_lock:
@@ -73,7 +76,7 @@ class Backend(BackendBase):
 
         if client is not None and closed:
             log.info("Successfully disconnected from OBS")
-
+        self._notify_connection_state(False)
 
     def connect_to(
             self,
@@ -111,16 +114,19 @@ class Backend(BackendBase):
                     )
                     self.connected = True
                     log.info("Successfully connected to OBS")
+                    self._notify_connection_state(True)
                     return True
                 except ConnectionRefusedError as e:
                     log.warning(f"Could not connect to OBS: {e}")
                     self.obs_client = None
                     self.connected = False
+                    self._notify_connection_state(False)
                     return False
                 except Exception as e:
                     log.error(f"Failed to connect to OBS: {e}")
                     self.obs_client = None
                     self.connected = False
+                    self._notify_connection_state(False)
                     return False
                 finally:
                     obs_logger.removeFilter(obs_filter)
@@ -129,6 +135,14 @@ class Backend(BackendBase):
 
     def get_connected(self) -> bool:
         return self.connected
+
+    def _notify_connection_state(self, connected: bool) -> None:
+        if connected == self._last_notified_state:
+            return
+        self._last_notified_state = connected
+        self.frontend.trigger_event(
+            "obs_connection_status", {"connected": connected}
+        )
 
     def _trigger_hotkey_by_name(self, name: str):
         with self._client_lock:

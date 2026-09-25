@@ -12,6 +12,9 @@ class PluginSettings:
         self.plugin_base = plugin_base
         self.ui = None
         self._reconnect_in_progress = False
+        self.plugin_base.connection_status_event.add_listener(
+            self._on_connection_status
+        )
 
     def _build_ui(self):
         plugin_base = self.plugin_base
@@ -101,6 +104,13 @@ class PluginSettings:
         settings["password"] = entry.get_text()
         self.plugin_base.set_settings(settings)
 
+    def _on_connection_status(self, event_data):
+        GLib.idle_add(self._refresh_status)
+
+    def _refresh_status(self):
+        self.update_status_label()
+        return False
+
     def update_status_label(self):
         backend = self.plugin_base.backend
         if backend is not None and backend.get_connected():
@@ -123,8 +133,6 @@ class PluginSettings:
     def get_ui(self) -> Gtk.Widget:
         if self.ui is None:
             self._build_ui()
-        else:
-            self.update_status_label()
         return self.ui
 
     def on_apply(self, button):

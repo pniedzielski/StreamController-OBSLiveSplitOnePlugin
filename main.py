@@ -2,6 +2,7 @@
 from src.backend.DeckManagement.InputIdentifier import Input
 from src.backend.PluginManager.ActionHolder import ActionHolder
 from src.backend.PluginManager.ActionInputSupport import ActionInputSupport
+from src.backend.PluginManager.EventHolder import EventHolder
 from src.backend.PluginManager.PluginBase import PluginBase
 
 import os
@@ -56,6 +57,14 @@ class OBSLiveSplitOnePlugin(PluginBase):
         # Setup plugin-level settings
         self.plugin_settings = None
         self.has_plugin_settings = True
+
+        # Setup connection status event
+        self.connection_status_event = EventHolder(
+            plugin_base=self,
+            event_id="obs_connection_status",
+            name="OBS Connection Status",
+            description="Triggered when OBS WebSocket connection state changes",
+        )
 
         # Register plugin
         self.register(
